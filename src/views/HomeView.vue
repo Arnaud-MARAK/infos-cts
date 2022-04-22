@@ -1,5 +1,5 @@
 <template>
-  <div class="home-view">
+  <div class="home-view" v-loading="loadingPage">
     <h1>Page d'Accueil</h1>
     <el-select
       class="input-form select-stop"
@@ -68,6 +68,7 @@ export default defineComponent({
   },
   data: function () {
     return {
+      loadingPage: false,
       loadingStop: false,
       baseUrl: api?.baseUrl,
       token: api.token,
@@ -146,8 +147,9 @@ export default defineComponent({
           );
           this.loadingStop = false
         })
-        .catch(function (error) {
+        .catch((error) => {
           console.log(error);
+          this.loadingStop = false
         });
     },
     getNextPassagesFromStop(){
@@ -155,6 +157,7 @@ export default defineComponent({
         return;
       }
 
+      this.loadingPage = true
       let url = this.baseUrl + "v1/siri/2.0/stop-monitoring";
       let authString = `${this.token}:${this.token}`;
       let headers = new Headers();
@@ -204,9 +207,11 @@ export default defineComponent({
         }
 
         this.sortSchedulesByTwoValues();
+        this.loadingPage = false
       })
-      .catch(function(error) {
+      .catch((error) => {
         console.log(error);
+        this.loadingPage = false
       });
     },
     sortSchedulesByTwoValues() {
