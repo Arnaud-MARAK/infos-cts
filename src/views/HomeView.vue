@@ -7,8 +7,8 @@
       filterable
       remote
       reserve-keyword
-      placeholder="Choix de l'arrêt"
-      :loading="loading"
+      placeholder="Arrêt*"
+      :loading="loadingStop"
     >
       <el-option
         v-for="stop in listStop"
@@ -17,6 +17,14 @@
         :value="stop.name"
       />
     </el-select>
+    <div class="select-time">
+      <el-time-picker
+        v-model="time"
+        placeholder="Horaire"
+        format="HH:mm"
+        clearable
+      />
+    </div>
     <el-button
       type="primary"
       @click="getNextPassagesFromStop"
@@ -43,13 +51,12 @@ export default defineComponent({
   },
   data: function () {
     return {
-      stopSelected2: {} as Stop,
-      loading: false,
+      loadingStop: false,
       baseUrl: api?.baseUrl,
       token: api.token,
       stopSelected: "",
+      time: null as unknown as Date,
       listStop: [] as Array<Stop>,
-      nameStops: [] as Array<string>,
       listSchedule: [] as Array<Schedule>,
     };
   },
@@ -58,7 +65,7 @@ export default defineComponent({
   },
   methods: {
     getStops() {
-      this.loading = true
+      this.loadingStop = true
       let url = this.baseUrl + "v1/siri/2.0/stoppoints-discovery";
       let authString = `${this.token}:${this.token}`;
       let headers = new Headers();
@@ -119,11 +126,7 @@ export default defineComponent({
           this.listStop.sort((a, b) =>
             a.name > b.name ? 1 : b.name > a.name ? -1 : 0
           );
-          this.loading = false
-          // Récupération des noms de chaque station
-          // this.listStop.forEach((stop) => {
-          //   this.nameStops.push(stop.name);
-          // });
+          this.loadingStop = false
         })
         .catch(function (error) {
           console.log(error);
@@ -145,6 +148,11 @@ export default defineComponent({
           url = stop.getUrlRefs(url)
         }
       })
+
+      if(this.time){
+        let time = this.time.toLocaleTimeString().substring(0, 5)
+        url += "&StartTime=2022-04-22T" + time + ":00"
+      }
 
       fetch(url,{method: 'GET', headers: headers})
       .then((response) => {
@@ -178,17 +186,17 @@ export default defineComponent({
       });
     },
     sortSchedulesByTwoValues() {
-      this.listSchedule.sort(function (a, b) {
-            var af = a.lineRef;
-            var bf = b.lineRef;
-            var as = a.destinationName;
-            var bs = b.destinationName;
-            if(af == bf) {
-                return (as < bs) ? -1 : (as > bs) ? 1 : 0;
-            } else {
-                return (af < bf) ? -1 : 1;
-            }
-        });
+      // this.listSchedule.sort(function (a, b) {
+      //   let af = a.lineRef;
+      //   let bf = b.lineRef;
+      //   let as = a.destinationName;
+      //   let bs = b.destinationName;
+      //   if(af == bf) {
+      //       return (as < bs) ? -1 : (as > bs) ? 1 : 0;
+      //   } else {
+      //       return (af < bf) ? -1 : 1;
+      //   }
+      // });
     }
   }
 });
@@ -202,6 +210,9 @@ export default defineComponent({
 }
 
 .select-stop{
+  margin-bottom: 12px;
+}
+.select-time{
   margin-bottom: 12px;
 }
 
