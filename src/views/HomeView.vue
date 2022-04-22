@@ -19,6 +19,7 @@
     </el-select>
     <div class="input-form select-time">
       <el-time-picker
+        style="width: 250px;"
         v-model="time"
         placeholder="Horaire"
         format="HH:mm"
@@ -234,6 +235,7 @@ export default defineComponent({
 
 .input-form{
   margin-bottom: 12px;
+  width: 250px;
 }
 
 </style>
