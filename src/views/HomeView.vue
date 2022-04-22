@@ -2,7 +2,7 @@
   <div class="home-view">
     <h1>Page d'Accueil</h1>
     <el-select
-      class="select-stop"
+      class="input-form select-stop"
       v-model="stopSelected"
       filterable
       remote
@@ -17,7 +17,7 @@
         :value="stop.name"
       />
     </el-select>
-    <div class="select-time">
+    <div class="input-form select-time">
       <el-time-picker
         v-model="time"
         placeholder="Horaire"
@@ -25,6 +25,22 @@
         clearable
       />
     </div>
+    <el-select
+      class="input-form select-vehicle"
+      v-model="vehicleMod"
+      filterable
+      remote
+      clearable
+      reserve-keyword
+      placeholder="Véhicule"
+    >
+      <el-option
+        v-for="v in listVehicles"
+        :key="v"
+        :label="v"
+        :value="v"
+      />
+    </el-select>
     <el-button
       type="primary"
       @click="getNextPassagesFromStop"
@@ -56,8 +72,10 @@ export default defineComponent({
       token: api.token,
       stopSelected: "",
       time: null as unknown as Date,
+      vehicleMod: "",
       listStop: [] as Array<Stop>,
       listSchedule: [] as Array<Schedule>,
+      listVehicles: ['Bus', 'Tram']
     };
   },
   created() {
@@ -154,6 +172,11 @@ export default defineComponent({
         url += "&StartTime=2022-04-22T" + time + ":00"
       }
 
+      if(this.vehicleMod !== ""){
+        url += "&VehicleMode=" + this.vehicleMod.toLowerCase()
+      }
+
+
       fetch(url,{method: 'GET', headers: headers})
       .then((response) => {
         return response.json();
@@ -186,17 +209,17 @@ export default defineComponent({
       });
     },
     sortSchedulesByTwoValues() {
-      // this.listSchedule.sort(function (a, b) {
-      //   let af = a.lineRef;
-      //   let bf = b.lineRef;
-      //   let as = a.destinationName;
-      //   let bs = b.destinationName;
-      //   if(af == bf) {
-      //       return (as < bs) ? -1 : (as > bs) ? 1 : 0;
-      //   } else {
-      //       return (af < bf) ? -1 : 1;
-      //   }
-      // });
+      this.listSchedule.sort(function (a, b) {
+        let af = a.lineRef;
+        let bf = b.lineRef;
+        let as = a.destinationName;
+        let bs = b.destinationName;
+        if(af == bf) {
+            return (as < bs) ? -1 : (as > bs) ? 1 : 0;
+        } else {
+            return (af < bf) ? -1 : 1;
+        }
+      });
     }
   }
 });
@@ -209,10 +232,7 @@ export default defineComponent({
   align-items: center;
 }
 
-.select-stop{
-  margin-bottom: 12px;
-}
-.select-time{
+.input-form{
   margin-bottom: 12px;
 }
 
