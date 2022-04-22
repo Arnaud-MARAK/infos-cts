@@ -62,6 +62,6 @@ props: {
 
 .time{
   /* border: solid blue; */
-  margin: 0px 6px;
+  margin: 6px;
 }
 </style>

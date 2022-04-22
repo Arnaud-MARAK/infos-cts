@@ -143,7 +143,6 @@ export default defineComponent({
       this.listStop.forEach(stop => {
         if(stop.name == this.stopSelected){
           url = stop.getUrlRefs(url)
-          console.log(url)
         }
       })
 
@@ -173,7 +172,6 @@ export default defineComponent({
         }
 
         this.sortSchedulesByTwoValues();
-        console.log(this.listSchedule)
       })
       .catch(function(error) {
         console.log(error);

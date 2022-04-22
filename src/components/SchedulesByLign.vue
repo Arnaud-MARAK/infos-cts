@@ -46,7 +46,6 @@ export default defineComponent({
         let ref = schedule.ref
         let lineRef = schedule.lineRef
         let vehicleMod = schedule.vehicleMod
-        console.log(schedule)
 
         if(schedulesByLineObject[ref]){
           schedulesByLineObject[ref].schedules.push(schedule.expectedArrived)
@@ -64,8 +63,6 @@ export default defineComponent({
       Object.entries(schedulesByLineObject).forEach(([key, value]) => {
         list.push(value)
       })
-
-      console.log("computed", list)
 
       return list
 		})
