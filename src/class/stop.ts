@@ -1,13 +1,13 @@
 import PhysicalStop from '@/class/physicalStop'
 
 export default class Stop {
-    code: number;
+		logicalStopCode: number;
     name: string;
     physcialStops: Array<PhysicalStop>;
 
-    constructor(code: number, name: string,physcialStops: Array<PhysicalStop>) {
+    constructor(logicalStopCode: number, name: string,physcialStops: Array<PhysicalStop>) {
         this.name = name;
-        this.code = code;
+        this.logicalStopCode = logicalStopCode;
         this.physcialStops = physcialStops;
     }
 
@@ -15,29 +15,23 @@ export default class Stop {
         return 10000;
     }
 
-    getRefs() : Array<string> {
-			const refs = [] as Array<string>;
+    getStopPointRefs() : Array<string> {
+			const stopPointRefs = [] as Array<string>;
 
 			this.physcialStops.forEach(ps => {
-				refs.push(ps.ref)
+				stopPointRefs.push(ps.stopPointRef)
 			})
 
-			return refs
+			return stopPointRefs
     }
 
-		getUrlRefs(url: string) : string {
-			
-			const refs = this.getRefs();
+		getPhysicalCode() : Array<string> {
+			const codes = [] as Array<string>;
 
-			for(let i = 0; i < refs.length; i++){
-				if(i == 0){
-					url = url + "?MonitoringRef=" + refs[i]
-				} else {
-					url = url + "&MonitoringRef=" + refs[i]
-					
-				}
-			}
+			this.physcialStops.forEach(ps => {
+				codes.push(ps.code)
+			})
 
-			return url
-		}
+			return codes
+    }
 }

@@ -99,7 +99,6 @@ export default defineComponent({
           this.listStop.splice(0, this.listStop.length);
           // Rassemblement de tout les arrêts physiques en une station
           for (let i = 0; i < stops.length; i++) {
-            // On vérifie que l'arrêt n'a pas déjà été traité
             let alreadyHere = false;
             for (let j = 0; j < this.listStop.length; j++) {
               if (stops[i].StopName == this.listStop[j].name) {
@@ -163,7 +162,7 @@ export default defineComponent({
       // On récupère les différents arrêt physique de la station choisie
       this.listStop.forEach(stop => {
         if(stop.name == this.stopSelected){
-          url = stop.getUrlRefs(url)
+          url += "?MonitoringRef=" + stop.logicalStopCode
         }
       })
 
@@ -176,6 +175,7 @@ export default defineComponent({
         url += "&VehicleMode=" + this.vehicleMod.toLowerCase()
       }
 
+      url += "&MinimumStopVisitsPerLine=5"
 
       fetch(url,{method: 'GET', headers: headers})
       .then((response) => {

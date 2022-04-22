@@ -43,14 +43,13 @@ export default defineComponent({
         let schedule = props.schedules[i] as Schedule
 
         let destinationName = schedule.destinationName
-        let ref = schedule.ref
         let lineRef = schedule.lineRef
         let vehicleMod = schedule.vehicleMod
 
-        if(schedulesByLineObject[ref]){
-          schedulesByLineObject[ref].schedules.push(schedule.expectedArrived)
+        if(schedulesByLineObject[destinationName]){
+          schedulesByLineObject[destinationName].schedules.push(schedule.expectedArrived)
         } else {
-          schedulesByLineObject[ref] = {
+          schedulesByLineObject[destinationName] = {
             name: destinationName,
             lineRef: lineRef,
             vehicleMod: vehicleMod,
@@ -63,7 +62,6 @@ export default defineComponent({
       Object.entries(schedulesByLineObject).forEach(([key, value]) => {
         list.push(value)
       })
-
       return list
 		})
 
