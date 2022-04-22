@@ -24,6 +24,7 @@
     >
       Récupérer les prochains passages
     </el-button>
+    <schedules-by-lign v-if="listSchedule[0] != null" :schedules="listSchedule" />
   </div>
 </template>
 
@@ -33,9 +34,13 @@ import Stop from "@/class/stop";
 import PhysicalStop from "@/class/physicalStop";
 import Schedule from "@/class/schedule";
 import api from "@/constants/api";
+import SchedulesByLign from '@/components/SchedulesByLign.vue'
 
 export default defineComponent({
   name: 'HomeView',
+  components: {
+    SchedulesByLign,
+  },
   data: function () {
     return {
       stopSelected2: {} as Stop,
